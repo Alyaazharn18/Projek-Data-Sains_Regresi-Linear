@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediksi Harga Mobil</title>
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Modern Minimalist Color Palette */
+            --primary: #2563EB;
+            --primary-hover: #1D4ED8;
+            --bg-color: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --text-main: #0F172A;
+            --text-muted: #64748B;
+            --border: #E2E8F0;
+            --accent-bg: #EFF6FF;
+            --accent-text: #1E3A8A;
+            --success-bg: #F0FDF4;
+            --success-text: #166534;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        /* Card Styling with Subtle Shadows */
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 2rem;
+            letter-spacing: -0.025em;
+        }
+
+        /* Form Inputs Styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            background-color: #F8FAFC;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        input:hover {
+            border-color: #CBD5E1;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: var(--card-bg);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        input::placeholder {
+            color: #94A3B8;
+        }
+
+        /* Button Styling */
+        button {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        /* Right Column Layout */
+        .result-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Prominent Price Display Area */
+        .price-display {
+            background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            border: 1px solid #BBF7D0;
+        }
+
+        .price-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--success-text);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.75rem;
+        }
+
+        .price-value {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #15803D;
+            margin: 0;
+            letter-spacing: -0.05em;
+            line-height: 1;
+        }
+
+        /* Summary List Styling */
+        .summary-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.875rem 0;
+            border-bottom: 1px dashed var(--border);
+            font-size: 0.95rem;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-item span:first-child {
+            color: var(--text-muted);
+        }
+
+        .summary-item span:last-child {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* Credits Box */
+        .credits {
+            background: var(--accent-bg);
+            border: 1px solid #DBEAFE;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-top: 2rem;
+            font-size: 0.875rem;
+        }
+
+        .credits .title {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--accent-text);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.75rem;
+        }
+
+        .credits p {
+            margin: 0.5rem 0 0 0;
+            color: var(--accent-text);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .credits p span.label {
+            color: #60A5FA;
+        }
+        
+        .credits p span.value {
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 860px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                padding: 1.5rem;
+            }
+            .price-value {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Loader Animation */
+        .loader {
+            display: none;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        button.loading .btn-text {
+            display: none;
+        }
+
+        button.loading .loader {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Kolom Kiri: Form Input -->
+    <div class="card">
+        <h2>Prediksi Harga Mobil</h2>
+        <form id="predictionForm">
+            <div class="form-group">
+                <label for="horsepower">Horsepower (Tenaga Kuda)</label>
+                <input type="number" id="horsepower" required placeholder="Contoh: 150" step="any">
+            </div>
+            <div class="form-group">
+                <label for="engine_size">Engine Size (Ukuran Mesin)</label>
+                <input type="number" id="engine_size" required placeholder="Contoh: 2.0" step="any">
+            </div>
+            <div class="form-group">
+                <label for="fuel_efficiency">Fuel Efficiency (MPG)</label>
+                <input type="number" id="fuel_efficiency" required placeholder="Contoh: 24" step="any">
+            </div>
+            <div class="form-group">
+                <label for="wheelbase">Wheelbase (Jarak Sumbu Roda)</label>
+                <input type="number" id="wheelbase" required placeholder="Contoh: 105" step="any">
+            </div>
+            <button type="submit" id="submitBtn">
+                <span class="btn-text">Hitung Harga Mobil</span>
+                <span class="loader"></span>
+            </button>
+        </form>
+    </div>
+
+    <!-- Kolom Kanan: Hasil Prediksi -->
+    <div class="card result-card">
+        <div>
+            <h2>Perkiraan Harga Mobil</h2>
+            
+            <div class="price-display">
+                <div class="price-label">Estimasi Harga</div>
+                <div class="price-value" id="resultPrice">$0.00</div>
+            </div>
+            
+            <div class="summary">
+                <ul class="summary-list">
+                    <li class="summary-item">
+                        <span>Horsepower:</span>
+                        <span id="sum-hp">-</span>
+                    </li>
+                    <li class="summary-item">
+                        <span>Engine Size:</span>
+                        <span id="sum-engine">-</span>
+                    </li>
+                    <li class="summary-item">
+                        <span>Fuel Efficiency:</span>
+                        <span id="sum-fuel">-</span>
+                    </li>
+                    <li class="summary-item">
+                        <span>Wheelbase:</span>
+                        <span id="sum-wheelbase">-</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="credits">
+            <div class="title">Sistem ini dibuat oleh:</div>
+            <p>
+                <span class="label">Nama:</span>
+                <span class="value" contenteditable="true" spellcheck="false">Alya Azhar Nabilah</span>
+            </p>
+            <p>
+                <span class="label">NPM:</span>
+                <span class="value" contenteditable="true" spellcheck="false">237006018</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const btn = document.getElementById('submitBtn');
+        btn.classList.add('loading');
+        
+        // Mengambil nilai input
+        const horsepower = parseFloat(document.getElementById('horsepower').value);
+        const engine_size = parseFloat(document.getElementById('engine_size').value);
+        const fuel_efficiency = parseFloat(document.getElementById('fuel_efficiency').value);
+        const wheelbase = parseFloat(document.getElementById('wheelbase').value);
+
+        // Update nilai pada ringkasan
+        document.getElementById('sum-hp').textContent = horsepower;
+        document.getElementById('sum-engine').textContent = engine_size;
+        document.getElementById('sum-fuel').textContent = fuel_efficiency;
+        document.getElementById('sum-wheelbase').textContent = wheelbase;
+
+        const data = {
+            "Horsepower": horsepower,
+            "Engine_size": engine_size,
+            "Fuel_efficiency": fuel_efficiency,
+            "Wheelbase": wheelbase
+        };
+
+        try {
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            
+            if(response.ok) {
+                // Harga dari model dalam ribuan dollar (contoh: 20.0 = $20,000)
+                const priceInThousands = result.predicted_price_in_thousands;
+                
+                // Format angka menjadi mata uang dengan titik sebagai pemisah ribuan ala Indonesia
+                // Menggunakan locale 'de-DE' atau 'id-ID' untuk pemisah titik
+                const formattedNumber = new Intl.NumberFormat('id-ID', { 
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(priceInThousands * 1000); 
+                
+                // Tambahkan simbol dollar di depan sesuai gambar referensi
+                document.getElementById('resultPrice').textContent = '$' + formattedNumber;
+            } else {
+                alert('Terjadi kesalahan saat memprediksi harga.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Gagal menghubungi API. Pastikan server Flask berjalan.');
+        } finally {
+            btn.classList.remove('loading');
+        }
+    });
+</script>
+
+</body>
+</html>
